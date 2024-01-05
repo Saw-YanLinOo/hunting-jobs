@@ -1,7 +1,14 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import { COLORS, SIZES } from "../../constants";
 import PopularJobCard from "../common/card/PopularJobCard";
+import useFetch from "../../hooks/useFetch";
 
 const popularJob = [
   { id: 1, name: "Job Hunting Company", role: "React Dev", location: "US" },
@@ -13,20 +20,31 @@ const popularJob = [
   },
 ];
 const PopularJob = () => {
+  const { data, isLoading, error, request } = useFetch("search", {
+    query: "React Developer",
+    num_page: 1,
+  });
+
   return (
     <View>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Popular Jobs</Text>
         <Text style={styles.showAllText}>Show all</Text>
       </View>
-      <FlatList
-        data={popularJob}
-        renderItem={({ item }) => <PopularJobCard item={item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ columnGap: SIZES.medium }}
-        horizontal
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      ) : error ? (
+        <Text>{error}</Text>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={({ item }) => <PopularJobCard item={item} />}
+          keyExtractor={(item) => item.job_id}
+          contentContainerStyle={{ columnGap: SIZES.medium }}
+          horizontal
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };

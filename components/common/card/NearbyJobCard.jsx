@@ -1,14 +1,23 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { COLORS, SIZES, images } from "../../../constants";
+import { COLORS, SIZES, STRING, images } from "../../../constants";
+import { checkImageURL } from "../../../util";
 
 const NearbyJobCard = ({ item }) => {
   return (
     <View style={styles.container}>
-      <Image source={images.profile} style={styles.jobImg} />
+      <Image
+        source={{
+          uri: checkImageURL(item.employer_logo)
+            ? item.employer_logo
+            : STRING.defaultImage,
+        }}
+        resizeMode="contain"
+        style={styles.jobImg}
+      />
       <View style={styles.infoContainer}>
-        <Text style={styles.companyName}>{item.name}</Text>
-        <Text style={styles.roleName}>{item.role}</Text>
+        <Text style={styles.companyName}>{item.employer_name}</Text>
+        <Text style={styles.roleName}>{item.job_title}</Text>
       </View>
     </View>
   );

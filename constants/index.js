@@ -1,4 +1,5 @@
 import icons from "./icons";
 import images from "./images";
 import { COLORS, SIZES } from "./themes";
-export { icons, images, COLORS, SIZES };
+import { STRING } from "./string";
+export { icons, images, COLORS, SIZES, STRING };

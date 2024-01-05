@@ -1,8 +1,15 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import { COLORS, SIZES } from "../../constants";
 import NearbyJobCard from "../common/card/NearbyJobCard";
 import PopularJobCard from "../common/card/PopularJobCard";
+import useFetch from "../../hooks/useFetch";
 const nearbyJobs = [
   { id: 1, name: "Job Hunting Company", role: "React Dev", location: "US" },
   {
@@ -13,15 +20,24 @@ const nearbyJobs = [
   },
 ];
 const NearbyJob = () => {
+  const { data, error, isLoading, refresh } = useFetch("search", {
+    query: "Flutter Developer",
+    num_page: 1,
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Nearby Jobs</Text>
         <Text style={styles.showAllText}>Show all</Text>
       </View>
-      {nearbyJobs.map((item) => (
-        <NearbyJobCard item={item} />
-      ))}
+      {isLoading ? (
+        <ActivityIndicator size="large" color={COLORS.gray} />
+      ) : error ? (
+        <Text>{error}</Text>
+      ) : (
+        data.map((item) => <NearbyJobCard item={item} key={item.job_id} />)
+      )}
     </View>
   );
 };

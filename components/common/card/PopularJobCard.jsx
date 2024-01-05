@@ -1,20 +1,29 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { COLORS, SIZES, images } from "../../../constants";
+import { COLORS, SIZES, STRING, images } from "../../../constants";
+import { checkImageURL } from "../../../util";
 
 const PopularJobCard = ({ item }) => {
   return (
     <View style={styles.container}>
       <View style={styles.jobCard}>
-        <Image source={images.profile} style={styles.jobImage} />
+        <Image
+          source={{
+            uri: checkImageURL(item.employer_logo)
+              ? item.employer_logo
+              : STRING.defaultImage,
+          }}
+          resizeMode="contain"
+          style={styles.jobImage}
+        />
         <Text style={styles.companyName} numberOfLines={1}>
-          {item.name}
+          {item.employer_name}
         </Text>
         <Text style={styles.position} numberOfLines={1}>
-          {item.role}
+          {item.job_title}
         </Text>
         <Text style={styles.location} numberOfLines={1}>
-          {item.location}
+          {item.job_country}
         </Text>
       </View>
     </View>
